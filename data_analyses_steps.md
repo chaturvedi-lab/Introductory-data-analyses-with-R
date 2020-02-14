@@ -1,4 +1,4 @@
-This is introductory course to do data analyses using the programming language R. We will use R Studio Cloud to get aquainted with the R programming language and perform some basic data analyses with some dummy data. We will then use specific data to do statistical tests and visualize patterns in R.
+This is introductory course to do data analyses using the programming language R. We will use R Studio Cloud (https://rstudio.cloud/) to get aquainted with the R programming language and perform some basic data analyses with some dummy data. We will then use specific data to do statistical tests and visualize patterns in R.
 
 1. What is R?
 
