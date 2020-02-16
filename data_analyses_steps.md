@@ -248,6 +248,114 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Length, colour = Species)) +
 ```
 Interesting! It looks like setosas are clearly different from the other two species. Versicolors and virginicas appear different too, however, it would be difficult to classify which is which on the border.
 
+```bash
+# Density & Frequency analysis with the Histogram,
+
+# Sepal length 
+HisSl <- ggplot(data=iris, aes(x=SepalLengthCm))+
+  geom_histogram(binwidth=0.2, color="black", aes(fill=Species)) + 
+  xlab("Sepal Length (cm)") +  
+  ylab("Frequency") + 
+  theme(legend.position="none")+
+  ggtitle("Histogram of Sepal Length")+
+  geom_vline(data=iris, aes(xintercept = mean(SepalLengthCm)),linetype="dashed",color="grey")
+
+
+# Sepal width
+HistSw <- ggplot(data=iris, aes(x=SepalWidthCm)) +
+  geom_histogram(binwidth=0.2, color="black", aes(fill=Species)) + 
+  xlab("Sepal Width (cm)") +  
+  ylab("Frequency") + 
+  theme(legend.position="none")+
+  ggtitle("Histogram of Sepal Width")+
+  geom_vline(data=iris, aes(xintercept = mean(SepalWidthCm)),linetype="dashed",color="grey")
+
+
+# Petal length
+HistPl <- ggplot(data=iris, aes(x=PetalLengthCm))+
+  geom_histogram(binwidth=0.2, color="black", aes(fill=Species)) + 
+  xlab("Petal Length (cm)") +  
+  ylab("Frequency") + 
+  theme(legend.position="none")+
+  ggtitle("Histogram of Petal Length")+
+  geom_vline(data=iris, aes(xintercept = mean(PetalLengthCm)),
+             linetype="dashed",color="grey")
+
+
+
+# Petal width
+HistPw <- ggplot(data=iris, aes(x=PetalWidthCm))+
+  geom_histogram(binwidth=0.2, color="black", aes(fill=Species)) + 
+  xlab("Petal Width (cm)") +  
+  ylab("Frequency") + 
+  theme(legend.position="right" )+
+  ggtitle("Histogram of Petal Width")+
+  geom_vline(data=iris, aes(xintercept = mean(PetalWidthCm)),linetype="dashed",color="grey")
+
+
+# Plot all visualizations
+grid.arrange(HisSl + ggtitle(""),
+             HistSw + ggtitle(""),
+             HistPl + ggtitle(""),
+             HistPw  + ggtitle(""),
+             nrow = 2,
+             top = textGrob("Iris Frequency Histogram", 
+                            gp=gpar(fontsize=15))
+)
+```
+
+Notice the shape of the data, most attributes exhibit a normal distribution. You can see the measurements of very small flowers in the Petal width and length column.
+
+Next with the bloxplot we will identify some outliers. As you can see some classes do not overlap at all (e.g. Petal Length) where as with other attributes there are hard to tease apart (Sepal Width).
+
+```bash
+ggplot(iris, aes(Species, PetalLengthCm, fill=Species)) + 
+  geom_boxplot()+
+  scale_y_continuous("Petal Length (cm)", breaks= seq(0,30, by=.5))+
+  labs(title = "Iris Petal Length Box Plot", x = "Species")
+```
+Let's plot all the variables in a single visualization that will contain all the boxplots.
+
+```bash
+BpSl <- ggplot(iris, aes(Species, SepalLengthCm, fill=Species)) + 
+        geom_boxplot()+
+        scale_y_continuous("Sepal Length (cm)", breaks= seq(0,30, by=.5))+
+        theme(legend.position="none")
+
+
+
+BpSw <-  ggplot(iris, aes(Species, SepalWidthCm, fill=Species)) + 
+          geom_boxplot()+
+          scale_y_continuous("Sepal Width (cm)", breaks= seq(0,30, by=.5))+
+          theme(legend.position="none")
+
+
+
+BpPl <- ggplot(iris, aes(Species, PetalLengthCm, fill=Species)) + 
+        geom_boxplot()+
+        scale_y_continuous("Petal Length (cm)", breaks= seq(0,30, by=.5))+
+        theme(legend.position="none")
+        
+
+
+BpPw <-  ggplot(iris, aes(Species, PetalWidthCm, fill=Species)) + 
+        geom_boxplot()+
+        scale_y_continuous("Petal Width (cm)", breaks= seq(0,30, by=.5))+
+        labs(title = "Iris Box Plot", x = "Species")
+
+
+
+# Plot all visualizations
+grid.arrange(BpSl  + ggtitle(""),
+             BpSw  + ggtitle(""),
+             BpPl + ggtitle(""),
+             BpPw + ggtitle(""),
+             nrow = 2,
+             top = textGrob("Sepal and Petal Box Plot", 
+                            gp=gpar(fontsize=15))
+)
+```
+
 16. Significance tests -- Regressions
 Let’s see what regression can do to classify this data using only Petal.Length and Sepal.Length as our explanatory variables. I’ll first create a dummy variable for versicolors. Then we’ll fit our model, and assume any observation who’s predicted probability is greater than one-half is a versicolor. Finally, we’ll examine our type 1 and type 2 errors.
 
