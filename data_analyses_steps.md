@@ -1,6 +1,6 @@
 This is introductory course to do data analyses using the programming language R. We will use R Studio Cloud (https://rstudio.cloud/) to get aquainted with the R programming language and perform some basic data analyses with some dummy data. We will then use specific data to do statistical tests and visualize patterns in R.
 
-1. What is R?
+**1. What is R?**
 
 * R is a ‘programming environment for statistics and graphics’
 
@@ -8,16 +8,13 @@ This is introductory course to do data analyses using the programming language R
 
 * There are over 6000 published extension packages for R, many aimed at genetics and genomics research.
 
-2. Using R
-R is a free implemention of S, for which John Chambers won the
-ACM Software Systems award.
-For the S system, which has forever altered how people
-analyze, visualize, and manipulate data.
-The downside is that using R effectively may require changing
-how you analyze, visualize, and manipulate data.
+**2. Using R**
+R is a free implemention of S, for which John Chambers won the ACM Software Systems award.
+For the S system, which has forever altered how people analyze, visualize, and manipulate data.
+The downside is that using R effectively may require changing how you analyze, visualize, and manipulate data.
 R is a command-line system, not a point-and-click system.
 
-3. A Calculator
+**3. A Calculator**
 R can be used as a calculator. Here are a few things to try:
 
 ```bash
@@ -31,23 +28,25 @@ ls()
 round(pi, 6)
 round(pi,+ 6)
 ```
-4. Scripts
+**4. Scripts**
 * We can use different kind of editors to write scripts for R.
+
 * We can write it in text editor.
+
 * We can write it in the terminal.
 
-5. Interface
+**5. Interface**
 
 For longer analyses (and for this course), it’s better to type code into a script and then run it. In base R;
-• Windows: File | New script, CTRL-R to run lines or regions
-• Mac: File | New Document, command-return to run
-• Some other text editors offer this: Emacs, Tinn, WinEDT,JGR, Eclipse. RStudio has a script editor and data viewer
+* Windows: File | New script, CTRL-R to run lines or regions
+* Mac: File | New Document, command-return to run
+* Some other text editors offer this: Emacs, Tinn, WinEDT,JGR, Eclipse. RStudio has a script editor and data viewer
 
-6. Reading in data - text, csv
+**6. Reading in data - text, csv**
 Ability to read in data is assumed. But to illustrate commands, and show some less-standard approaches, we’ll review reading in:
-• Text files, comma separated files
-• Other statistics packages datasets
-• Web pages
+* Text files, comma separated files
+* Other statistics packages datasets
+* Web pages
 
 ```bash
 ## read in the text file ####
@@ -60,10 +59,10 @@ data(iris)
 ## read in data from the web #######
 fl2000<-read.table("http://faculty.washington.edu/tlumley/data/FLvote.dat", header=TRUE)
 ```
-7. Syntax
+**7. Syntax**
 Assigning a single vector (or anything else) to a variable uses the same syntax as assigning a whole data frame.
-• c() is a function that makes a single vector from its arguments.
-• names() is a function that accesses the variable names of a data frame
+* c() is a function that makes a single vector from its arguments.
+* names() is a function that accesses the variable names of a data frame
 
 ```bash
 mylist<-c(1,2,3,4)
@@ -75,7 +74,7 @@ names(iris)
 head(iris)
 ```
 
-8. Sanity checks -- Did it work?
+**8. Sanity checks -- Did it work?**
 When you read in a data file or load data from R, you can do checks to make sure your data is loaded correctly.
 * head() is a function that shows you that initial lines of the data frame
 * dim() is a function that that gives you the dimensions of your data frame
@@ -93,7 +92,7 @@ iris$Species
 iris[,1]
 iris[1,]
 ```
-9. Where's my file?
+**9. Where's my file?**
 It is important to check your working directory in R. This is the place from where you will source in your data files and where your output files will be saved by default.
 
 ```bash
@@ -103,7 +102,7 @@ getwd()
 ## set your working directory ###
 setwd()
 ```
-10. Operating on data
+**10. Operating on data**
 We assume you know how to use the $ sign, to indicate columns of interest in a dataset. From here onwards, we will work with iris data from R.
 
 ```bash
@@ -116,7 +115,7 @@ head(iris$Species)
 ## check column subsets on data ###
 head(iris[,1])
 ```
-11. Subsets
+**11. Subsets**
 Everything in R is a vector (but some have only one element). There are several ways to use [] to extract subsets
 
 ```bash
@@ -135,13 +134,13 @@ iris$Sepal.Length[iris$Species == "versicolor"]
 ```
 
 Positive indices select elements, negative indices drop elements
-• 5:10 is the sequence from 5 to 10
-• You need == to test equality, not just =
-• with() temporarily sets up a data frame as the default place to look up variables.
+* 5:10 is the sequence from 5 to 10
+* You need == to test equality, not just =
+* with() temporarily sets up a data frame as the default place to look up variables.
 
-12. Computation- mean, median, mode, sd
+**12. Data analyses **
 Let us now try some computation on our data frame and try to do some statistical tests.
-Sepal.Length Sepal.Width Petal.Length Petal.Width
+
 ```bash
 mean(iris$Sepal.Width)
 median(iris$Sepal.Width)
@@ -149,11 +148,8 @@ var(iris$Sepal.Width)
 sd(iris$Sepal.Width)
 mean(iris$Petal.Length)
 mean(iris$Petal.Length[iris$Species=="setosa"])
-``` 
-13. Help
-
-14. Data analyses
-
+```
+Boxplot
 boxplot function uses the syntax y ~ group, where the reference to the left of the tilde (~) is the value to plot on the y-axis (here we are plotting the values of Petal.Length) and the reference to the right indicates how to group the data (here we group by the value in the Species column of iris). Find out more about the plot by typing ?boxplot into the console.
 
 ``` bash
@@ -197,7 +193,7 @@ So the code
 setosa <- iris[iris$Species == "setosa", ]
 ```
 
-will extract all columns (because there is nothing after the comma) in the iris data for those rows where the value in the Species column is “setosa” and assign that information to a variable called setosa.
+We will extract all columns (because there is nothing after the comma) in the iris data for those rows where the value in the Species column is “setosa” and assign that information to a variable called setosa.
 
 Comparing the iris data and the setosa data, we see that there are indeed fewer rows in the setosa data:
 
@@ -238,7 +234,7 @@ The results include:
 
 So we reject the hypothesis that these species have the same petal lengths.
 
-15. Visualize the data
+**13. Visualize the data**
 
 ```bash
 library('ggplot2')
@@ -356,7 +352,8 @@ grid.arrange(BpSl  + ggtitle(""),
 )
 ```
 
-16. Significance tests -- Regressions
+**14. Significance tests**
+
 Let’s see what regression can do to classify this data using only Petal.Length and Sepal.Length as our explanatory variables. I’ll first create a dummy variable for versicolors. Then we’ll fit our model, and assume any observation who’s predicted probability is greater than one-half is a versicolor. Finally, we’ll examine our type 1 and type 2 errors.
 
 ```bash
