@@ -138,7 +138,7 @@ Positive indices select elements, negative indices drop elements
 * You need == to test equality, not just =
 * with() temporarily sets up a data frame as the default place to look up variables.
 
-**12. Data analyses **
+**12. Data analyses**
 Let us now try some computation on our data frame and try to do some statistical tests.
 
 ```bash
