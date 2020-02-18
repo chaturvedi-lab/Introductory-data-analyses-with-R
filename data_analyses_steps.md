@@ -427,3 +427,58 @@ table(iris[, c('Is.Versicolor', 'Predict.Versicolor.logit')])
 ```
 
 Our model is far too conservative. It only predicted one versicolor! Both explanatory variables are significant with p < 0.05, however the intercept is not.
+
+One-way ANOVA
+Next, let's perform our ANOVA test. We'll use the aov() function and pass in our variables in the correct order. We'll save our results to an object we name ANOVA.
+
+```bash
+ANOVA <- aov(Sepal.Width ~ Species, data=iris) # (DV ~ IV, data=dataset)
+summary(ANOVA) # View results of the ANOVA test
+
+#             Df Sum Sq Mean Sq F value Pr(>F)    
+#Species       2  11.35   5.672   49.16 <2e-16 ***
+#Residuals   147  16.96   0.115                   
+#---
+#Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+
+We can see that the p-value is less than our alpha 0.05 significance level we've chosen, which means we reject the null hypothesis that the differences between the means are not statistically significant and instead accept the alternative hypothesis that the differences between at least one of the means is statistically significant. Our extremely low p-value means that there is a 0.00000000000002% chance we are wrong in our decision to reject the null hypothesis. Next, we'll run post-hoc tests, such as Tukey's Honest Significant Difference test, to determine which species have significantly different means.
+
+Post-hoc Tests
+Tukey's Honest Significant Difference Test
+Performing this test is easy as it requires only one line. We pass in our ANOVA object to the TukeyHSD function.
+
+```bash
+TukeyHSD(ANOVA)
+
+#Tukey multiple comparisons of means
+#    95% family-wise confidence level
+
+#Fit: aov(formula = Sepal.Width ~ Species, data = iris)
+
+#$Species
+#                       diff         lwr        upr     p adj
+#versicolor-setosa    -0.658 -0.81885528 -0.4971447 0.0000000
+#virginica-setosa     -0.454 -0.61485528 -0.2931447 0.0000000
+#virginica-versicolor  0.204  0.04314472  0.3648553 0.0087802
+```
+
+Using an alpha of 0.05, we can see that the p adj value is less than our alpha in all three pairwise comparisons meaning there is a significant difference between all three species' means. 
+
+Pairwise T-Test
+If you prefer to do t-tests, you can use the following method to perform pairwise t-tests on all your factor levels. The pairwise.t.test() function allows you to choose between eight p-value adjustments to help counteract the problem of multiple comparisons: holm, hochberg, hommel, bonferroni, BH, BY, fdr, and none. To reduce the chance of incorrectly rejecting our null hypothesis (Type I error) we'll use the Bonferroni correction method when performing our multiple comparisons.
+
+```bash
+pairwise.t.test(iris$Sepal.Width, iris$Species, p.adj="bonferroni", paired=FALSE)
+
+#Pairwise comparisons using t tests with pooled SD 
+
+#data:  iris$Sepal.Width and iris$Species 
+
+#           setosa  versicolor
+#versicolor < 2e-16 -         
+#virginica  1.4e-09 0.0094    
+
+#P value adjustment method: bonferroni 
+```
+Our t-test comparisons show that all three species' means are significantly different because all p-values are less than our 0.05 alpha.
