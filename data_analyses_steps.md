@@ -9,12 +9,14 @@ This is introductory course to do data analyses using the programming language R
 * There are over 6000 published extension packages for R, many aimed at genetics and genomics research.
 
 **2. Using R**
+
 R is a free implemention of S, for which John Chambers won the ACM Software Systems award.
 For the S system, which has forever altered how people analyze, visualize, and manipulate data.
 The downside is that using R effectively may require changing how you analyze, visualize, and manipulate data.
 R is a command-line system, not a point-and-click system.
 
 **3. A Calculator**
+
 R can be used as a calculator. Here are a few things to try:
 
 ```bash
@@ -29,6 +31,7 @@ round(pi, 6)
 round(pi,+ 6)
 ```
 **4. Scripts**
+
 * We can use different kind of editors to write scripts for R.
 
 * We can write it in text editor.
@@ -43,6 +46,7 @@ For longer analyses (and for this course), it’s better to type code into a scr
 * Some other text editors offer this: Emacs, Tinn, WinEDT,JGR, Eclipse. RStudio has a script editor and data viewer
 
 **6. Reading in data - text, csv**
+
 Ability to read in data is assumed. But to illustrate commands, and show some less-standard approaches, we’ll review reading in:
 * Text files, comma separated files
 * Other statistics packages datasets
@@ -60,6 +64,7 @@ data(iris)
 fl2000<-read.table("http://faculty.washington.edu/tlumley/data/FLvote.dat", header=TRUE)
 ```
 **7. Syntax**
+
 Assigning a single vector (or anything else) to a variable uses the same syntax as assigning a whole data frame.
 * c() is a function that makes a single vector from its arguments.
 * names() is a function that accesses the variable names of a data frame
@@ -75,6 +80,7 @@ head(iris)
 ```
 
 **8. Sanity checks -- Did it work?**
+
 When you read in a data file or load data from R, you can do checks to make sure your data is loaded correctly.
 * head() is a function that shows you that initial lines of the data frame
 * dim() is a function that that gives you the dimensions of your data frame
@@ -93,6 +99,7 @@ iris[,1]
 iris[1,]
 ```
 **9. Where's my file?**
+
 It is important to check your working directory in R. This is the place from where you will source in your data files and where your output files will be saved by default.
 
 ```bash
@@ -103,6 +110,7 @@ getwd()
 setwd()
 ```
 **10. Operating on data**
+
 We assume you know how to use the $ sign, to indicate columns of interest in a dataset. From here onwards, we will work with iris data from R.
 
 ```bash
@@ -116,19 +124,25 @@ head(iris$Species)
 head(iris[,1])
 ```
 **11. Subsets**
+
 Everything in R is a vector (but some have only one element). There are several ways to use [] to extract subsets
 
 ```bash
 ## First element
 iris$Sepal.Length[1]
+
 ## All but first element
 iris$Sepal.Length[-1]
+
 ## Elements 5 through 10
 iris$Sepal.Length[5:10]
+
 ## Elements 5 and 7
 iris$Sepal.Length[c(5,7)]
+
 ## Sepal length less than a value
 iris$Sepal.Length[ iris$Sepal.Length < 5 ]
+
 ## Sepal length from species versicolor
 iris$Sepal.Length[iris$Species == "versicolor"]
 ```
@@ -138,7 +152,8 @@ Positive indices select elements, negative indices drop elements
 * You need == to test equality, not just =
 * with() temporarily sets up a data frame as the default place to look up variables.
 
-**12. Data analyses**
+**12. Preliminary data analyses**
+
 Let us now try some computation on our data frame and try to do some statistical tests.
 
 ```bash
@@ -149,13 +164,13 @@ sd(iris$Sepal.Width)
 mean(iris$Petal.Length)
 mean(iris$Petal.Length[iris$Species=="setosa"])
 ```
-Boxplot
+***Boxplot***
 boxplot function uses the syntax y ~ group, where the reference to the left of the tilde (~) is the value to plot on the y-axis (here we are plotting the values of Petal.Length) and the reference to the right indicates how to group the data (here we group by the value in the Species column of iris). Find out more about the plot by typing ?boxplot into the console.
 
 ``` bash
 boxplot(formula = Petal.Length ~ Species, data = iris)
 ```
-Student’s t
+***Student’s t***
 We are going to start by doing a single comparison, looking at the petal lengths of two species. We use a t-test to ask whether or not the values for two species were likely drawn from two separate populations. Just looking at the data for two species of irises, it looks like the petal lengths are different, but are they significantly different?
 
 ```bash 
@@ -428,7 +443,7 @@ table(iris[, c('Is.Versicolor', 'Predict.Versicolor.logit')])
 
 Our model is far too conservative. It only predicted one versicolor! Both explanatory variables are significant with p < 0.05, however the intercept is not.
 
-One-way ANOVA
+***One-way ANOVA***
 Next, let's perform our ANOVA test. We'll use the aov() function and pass in our variables in the correct order. We'll save our results to an object we name ANOVA.
 
 ```bash
@@ -444,7 +459,7 @@ summary(ANOVA) # View results of the ANOVA test
 
 We can see that the p-value is less than our alpha 0.05 significance level we've chosen, which means we reject the null hypothesis that the differences between the means are not statistically significant and instead accept the alternative hypothesis that the differences between at least one of the means is statistically significant. Our extremely low p-value means that there is a 0.00000000000002% chance we are wrong in our decision to reject the null hypothesis. Next, we'll run post-hoc tests, such as Tukey's Honest Significant Difference test, to determine which species have significantly different means.
 
-Post-hoc Tests
+***Post-hoc Tests***
 Tukey's Honest Significant Difference Test
 Performing this test is easy as it requires only one line. We pass in our ANOVA object to the TukeyHSD function.
 
@@ -465,7 +480,7 @@ TukeyHSD(ANOVA)
 
 Using an alpha of 0.05, we can see that the p adj value is less than our alpha in all three pairwise comparisons meaning there is a significant difference between all three species' means. 
 
-Pairwise T-Test
+***Pairwise T-Test***
 If you prefer to do t-tests, you can use the following method to perform pairwise t-tests on all your factor levels. The pairwise.t.test() function allows you to choose between eight p-value adjustments to help counteract the problem of multiple comparisons: holm, hochberg, hommel, bonferroni, BH, BY, fdr, and none. To reduce the chance of incorrectly rejecting our null hypothesis (Type I error) we'll use the Bonferroni correction method when performing our multiple comparisons.
 
 ```bash
