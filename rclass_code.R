@@ -117,6 +117,7 @@ setosa.v.versicolor
 
 ## visualize data ##
 install.packages("ggplot2")
+install.packages("gridExtra")
 library('ggplot2')
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Length, colour = Species)) + 
   geom_point() +
