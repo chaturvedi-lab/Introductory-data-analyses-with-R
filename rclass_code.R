@@ -126,47 +126,54 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Length, colour = Species)) +
 # Density & Frequency analysis with the Histogram,
 
 # Sepal length 
-HisSl <- ggplot(data=iris, aes(x=SepalLengthCm))+
+HisSl <- ggplot(data=iris, aes(x=Sepal.Length))+
   geom_histogram(binwidth=0.2, color="black", aes(fill=Species)) + 
   xlab("Sepal Length (cm)") +  
   ylab("Frequency") + 
   theme(legend.position="none")+
   ggtitle("Histogram of Sepal Length")+
-  geom_vline(data=iris, aes(xintercept = mean(SepalLengthCm)),linetype="dashed",color="grey")
+  geom_vline(data=iris, aes(xintercept = mean(Sepal.Length)),linetype="dashed",color="grey")
 
 
 # Sepal width
-HistSw <- ggplot(data=iris, aes(x=SepalWidthCm)) +
+HistSw <- ggplot(data=iris, aes(x=Sepal.Width)) +
   geom_histogram(binwidth=0.2, color="black", aes(fill=Species)) + 
   xlab("Sepal Width (cm)") +  
   ylab("Frequency") + 
   theme(legend.position="none")+
   ggtitle("Histogram of Sepal Width")+
-  geom_vline(data=iris, aes(xintercept = mean(SepalWidthCm)),linetype="dashed",color="grey")
+  geom_vline(data=iris, aes(xintercept = mean(Sepal.Width)),linetype="dashed",color="grey")
 
 
 # Petal length
-HistPl <- ggplot(data=iris, aes(x=PetalLengthCm))+
+HistPl <- ggplot(data=iris, aes(x=Petal.Length))+
   geom_histogram(binwidth=0.2, color="black", aes(fill=Species)) + 
   xlab("Petal Length (cm)") +  
   ylab("Frequency") + 
   theme(legend.position="none")+
   ggtitle("Histogram of Petal Length")+
-  geom_vline(data=iris, aes(xintercept = mean(PetalLengthCm)),
+  geom_vline(data=iris, aes(xintercept = mean(Petal.Length)),
              linetype="dashed",color="grey")
 
 
 
 # Petal width
-HistPw <- ggplot(data=iris, aes(x=PetalWidthCm))+
+HistPw <- ggplot(data=iris, aes(x=Petal.Width))+
   geom_histogram(binwidth=0.2, color="black", aes(fill=Species)) + 
   xlab("Petal Width (cm)") +  
   ylab("Frequency") + 
   theme(legend.position="right" )+
   ggtitle("Histogram of Petal Width")+
-  geom_vline(data=iris, aes(xintercept = mean(PetalWidthCm)),linetype="dashed",color="grey")
+  geom_vline(data=iris, aes(xintercept = mean(Petal.Width)),linetype="dashed",color="grey")
+
+install.packages("gridExtra")
+install.packages("grid")
+install.packages("plyr")
 
 
+library(gridExtra)
+library(grid)
+library(plyr)
 # Plot all visualizations
 grid.arrange(HisSl + ggtitle(""),
              HistSw + ggtitle(""),
@@ -178,38 +185,38 @@ grid.arrange(HisSl + ggtitle(""),
 )
 
 ## another boxplot
-ggplot(iris, aes(Species, PetalLengthCm, fill=Species)) + 
+ggplot(iris, aes(Species, Petal.Length, fill=Species)) + 
   geom_boxplot()+
-  scale_y_continuous("Petal Length (cm)", breaks= seq(0,30, by=.5))+
+  scale_y_continuous("Petal Length", breaks= seq(0,30, by=.5))+
   labs(title = "Iris Petal Length Box Plot", x = "Species")
 
 
 ## all variables ####
-BpSl <- ggplot(iris, aes(Species, SepalLengthCm, fill=Species)) + 
-        geom_boxplot()+
-        scale_y_continuous("Sepal Length (cm)", breaks= seq(0,30, by=.5))+
-        theme(legend.position="none")
+BpSl <- ggplot(iris, aes(Species, Sepal.Length, fill=Species)) + 
+  geom_boxplot()+
+  scale_y_continuous("Sepal Length", breaks= seq(0,30, by=.5))+
+  theme(legend.position="none")
 
 
 
-BpSw <-  ggplot(iris, aes(Species, SepalWidthCm, fill=Species)) + 
-          geom_boxplot()+
-          scale_y_continuous("Sepal Width (cm)", breaks= seq(0,30, by=.5))+
-          theme(legend.position="none")
+BpSw <-  ggplot(iris, aes(Species, Sepal.Width, fill=Species)) + 
+  geom_boxplot()+
+  scale_y_continuous("Sepal.Width", breaks= seq(0,30, by=.5))+
+  theme(legend.position="none")
 
 
 
-BpPl <- ggplot(iris, aes(Species, PetalLengthCm, fill=Species)) + 
-        geom_boxplot()+
-        scale_y_continuous("Petal Length (cm)", breaks= seq(0,30, by=.5))+
-        theme(legend.position="none")
-        
+BpPl <- ggplot(iris, aes(Species, Petal.Length, fill=Species)) + 
+  geom_boxplot()+
+  scale_y_continuous("Petal Length", breaks= seq(0,30, by=.5))+
+  theme(legend.position="none")
 
 
-BpPw <-  ggplot(iris, aes(Species, PetalWidthCm, fill=Species)) + 
-        geom_boxplot()+
-        scale_y_continuous("Petal Width (cm)", breaks= seq(0,30, by=.5))+
-        labs(title = "Iris Box Plot", x = "Species")
+
+BpPw <-  ggplot(iris, aes(Species, Petal.Width, fill=Species)) + 
+  geom_boxplot()+
+  scale_y_continuous("Petal Width", breaks= seq(0,30, by=.5))+
+  labs(title = "Iris Box Plot", x = "Species")
 
 
 
@@ -222,18 +229,6 @@ grid.arrange(BpSl  + ggtitle(""),
              top = textGrob("Sepal and Petal Box Plot", 
                             gp=gpar(fontsize=15))
 )
-
-## regression
-iris[['Is.Versicolor']] <- as.numeric(iris[['Species']] == 'versicolor')
-fit.lm <- lm(Is.Versicolor ~ Petal.Length + Sepal.Length, data = iris)
-summary(fit.lm)
-
-fit.logit <- glm(Is.Versicolor ~ Petal.Length + Sepal.Length, data = iris,
-                 family = binomial(link = 'logit'))
-summary(fit.logit)
-
-iris[['Predict.Versicolor.logit']] <- as.numeric(predict(fit.logit) > 0.5)
-table(iris[, c('Is.Versicolor', 'Predict.Versicolor.logit')])
 
 ## One-way ANOVA
 
