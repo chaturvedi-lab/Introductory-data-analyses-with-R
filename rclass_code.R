@@ -20,33 +20,27 @@ data(iris)
 fl2000<-read.table("http://faculty.washington.edu/tlumley/data/FLvote.dat", header=TRUE)
 
 ##syntax
+#create lists
 mylist<-c(1,2,3,4)
 mylist<-c(1:10)
 mylist<-c("a","b","c","d")
-
-names(iris)
-
-head(iris)
 
 #sanity checks
 ## load your data ###
 data(iris)
 
 ## check the data ###
+#check file data
 head(iris)
+#check data names
+names(iris)
+#check dataframe dimensions
 dim(iris)
+#check what a column looks like
+#subsetting data by $ 
 iris$Species
 iris[,1]
 iris[1,]
-
-##check your present directory ###
-getwd()
-
-## set your working directory ###
-setwd()
-
-## check if you have the data loaded ###
-head(iris)
 
 ## check the $ operations on data ###
 head(iris$Species)
@@ -75,10 +69,15 @@ iris$Sepal.Length[iris$Species == "versicolor"]
 
 
 ## some preliminary analyses #####
+## take mean
 mean(iris$Sepal.Width)
+## take median
 median(iris$Sepal.Width)
+## check for variation
 var(iris$Sepal.Width)
+## take standard deviation
 sd(iris$Sepal.Width)
+##more
 mean(iris$Petal.Length)
 mean(iris$Petal.Length[iris$Species=="setosa"])
 
