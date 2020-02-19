@@ -83,7 +83,7 @@ mean(iris$Petal.Length[iris$Species=="setosa"])
 
 ## boxplot
 boxplot(formula = Petal.Length ~ Species, data = iris)
-```
+
 ## Student’s t
 
 setosa <- iris[iris$Species == "setosa", ]
@@ -113,9 +113,10 @@ setosa.v.versicolor
 ## sample estimates:
 ## mean of x mean of y 
 ##     1.462     4.260
-```
+
 
 ## visualize data ##
+install.packages("ggplot2")
 library('ggplot2')
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Length, colour = Species)) + 
   geom_point() +
