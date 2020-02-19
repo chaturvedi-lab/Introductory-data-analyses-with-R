@@ -252,6 +252,7 @@ So we reject the hypothesis that these species have the same petal lengths.
 **13. Visualize the data**
 
 ```bash
+install.packages("ggplot2")
 library('ggplot2')
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Length, colour = Species)) + 
   geom_point() +
@@ -263,47 +264,44 @@ Interesting! It looks like setosas are clearly different from the other two spec
 # Density & Frequency analysis with the Histogram,
 
 # Sepal length 
-HisSl <- ggplot(data=iris, aes(x=SepalLengthCm))+
-  geom_histogram(binwidth=0.2, color="black", aes(fill=Species)) + 
-  xlab("Sepal Length (cm)") +  
-  ylab("Frequency") + 
-  theme(legend.position="none")+
-  ggtitle("Histogram of Sepal Length")+
-  geom_vline(data=iris, aes(xintercept = mean(SepalLengthCm)),linetype="dashed",color="grey")
-
-
-# Sepal width
-HistSw <- ggplot(data=iris, aes(x=SepalWidthCm)) +
+HistSw <- ggplot(data=iris, aes(x=Sepal.Width)) +
   geom_histogram(binwidth=0.2, color="black", aes(fill=Species)) + 
   xlab("Sepal Width (cm)") +  
   ylab("Frequency") + 
   theme(legend.position="none")+
   ggtitle("Histogram of Sepal Width")+
-  geom_vline(data=iris, aes(xintercept = mean(SepalWidthCm)),linetype="dashed",color="grey")
+  geom_vline(data=iris, aes(xintercept = mean(Sepal.Width)),linetype="dashed",color="grey")
 
 
 # Petal length
-HistPl <- ggplot(data=iris, aes(x=PetalLengthCm))+
+HistPl <- ggplot(data=iris, aes(x=Petal.Length))+
   geom_histogram(binwidth=0.2, color="black", aes(fill=Species)) + 
   xlab("Petal Length (cm)") +  
   ylab("Frequency") + 
   theme(legend.position="none")+
   ggtitle("Histogram of Petal Length")+
-  geom_vline(data=iris, aes(xintercept = mean(PetalLengthCm)),
+  geom_vline(data=iris, aes(xintercept = mean(Petal.Length)),
              linetype="dashed",color="grey")
 
 
 
 # Petal width
-HistPw <- ggplot(data=iris, aes(x=PetalWidthCm))+
+HistPw <- ggplot(data=iris, aes(x=Petal.Width))+
   geom_histogram(binwidth=0.2, color="black", aes(fill=Species)) + 
   xlab("Petal Width (cm)") +  
   ylab("Frequency") + 
   theme(legend.position="right" )+
   ggtitle("Histogram of Petal Width")+
-  geom_vline(data=iris, aes(xintercept = mean(PetalWidthCm)),linetype="dashed",color="grey")
+  geom_vline(data=iris, aes(xintercept = mean(Petal.Width)),linetype="dashed",color="grey")
+
+install.packages("gridExtra")
+install.packages("grid")
+install.packages("plyr")
 
 
+library(gridExtra)
+library(grid)
+library(plyr)
 # Plot all visualizations
 grid.arrange(HisSl + ggtitle(""),
              HistSw + ggtitle(""),
@@ -328,31 +326,31 @@ ggplot(iris, aes(Species, PetalLengthCm, fill=Species)) +
 Let's plot all the variables in a single visualization that will contain all the boxplots.
 
 ```bash
-BpSl <- ggplot(iris, aes(Species, SepalLengthCm, fill=Species)) + 
-        geom_boxplot()+
-        scale_y_continuous("Sepal Length (cm)", breaks= seq(0,30, by=.5))+
-        theme(legend.position="none")
+BpSl <- ggplot(iris, aes(Species, Sepal.Length, fill=Species)) + 
+  geom_boxplot()+
+  scale_y_continuous("Sepal Length", breaks= seq(0,30, by=.5))+
+  theme(legend.position="none")
 
 
 
-BpSw <-  ggplot(iris, aes(Species, SepalWidthCm, fill=Species)) + 
-          geom_boxplot()+
-          scale_y_continuous("Sepal Width (cm)", breaks= seq(0,30, by=.5))+
-          theme(legend.position="none")
+BpSw <-  ggplot(iris, aes(Species, Sepal.Width, fill=Species)) + 
+  geom_boxplot()+
+  scale_y_continuous("Sepal.Width", breaks= seq(0,30, by=.5))+
+  theme(legend.position="none")
 
 
 
-BpPl <- ggplot(iris, aes(Species, PetalLengthCm, fill=Species)) + 
-        geom_boxplot()+
-        scale_y_continuous("Petal Length (cm)", breaks= seq(0,30, by=.5))+
-        theme(legend.position="none")
-        
+BpPl <- ggplot(iris, aes(Species, Petal.Length, fill=Species)) + 
+  geom_boxplot()+
+  scale_y_continuous("Petal Length", breaks= seq(0,30, by=.5))+
+  theme(legend.position="none")
 
 
-BpPw <-  ggplot(iris, aes(Species, PetalWidthCm, fill=Species)) + 
-        geom_boxplot()+
-        scale_y_continuous("Petal Width (cm)", breaks= seq(0,30, by=.5))+
-        labs(title = "Iris Box Plot", x = "Species")
+
+BpPw <-  ggplot(iris, aes(Species, Petal.Width, fill=Species)) + 
+  geom_boxplot()+
+  scale_y_continuous("Petal Width", breaks= seq(0,30, by=.5))+
+  labs(title = "Iris Box Plot", x = "Species")
 
 
 
@@ -368,80 +366,6 @@ grid.arrange(BpSl  + ggtitle(""),
 ```
 
 **14. Significance tests**
-
-Let’s see what regression can do to classify this data using only Petal.Length and Sepal.Length as our explanatory variables. I’ll first create a dummy variable for versicolors. Then we’ll fit our model, and assume any observation who’s predicted probability is greater than one-half is a versicolor. Finally, we’ll examine our type 1 and type 2 errors.
-
-```bash
-iris[['Is.Versicolor']] <- as.numeric(iris[['Species']] == 'versicolor')
-fit.lm <- lm(Is.Versicolor ~ Petal.Length + Sepal.Length, data = iris)
-summary(fit.lm)
-#> 
-#> Call:
-#> lm(formula = Is.Versicolor ~ Petal.Length + Sepal.Length, data = iris)
-#> 
-#> Residuals:
-#>     Min      1Q  Median      3Q     Max 
-#> -0.6597 -0.3667 -0.1962  0.5520  0.7929 
-#> 
-#> Coefficients:
-#>              Estimate Std. Error t value Pr(>|t|)    
-#> (Intercept)   1.11893    0.40693   2.750 0.006715 ** 
-#> Petal.Length  0.14794    0.04328   3.419 0.000815 ***
-#> Sepal.Length -0.22959    0.09226  -2.489 0.013940 *  
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> Residual standard error: 0.4569 on 147 degrees of freedom
-#> Multiple R-squared:  0.07949,    Adjusted R-squared:  0.06696 
-#> F-statistic: 6.347 on 2 and 147 DF,  p-value: 0.002271
-iris[['Predict.Versicolor.lm']] <- as.numeric(predict(fit.lm) > 0.5)
-## Plot predicted vs. actual values
-table(iris[, c('Is.Versicolor', 'Predict.Versicolor.lm')])
-#>              Predict.Versicolor.lm
-#> Is.Versicolor  0  1
-#>             0 89 11
-#>             1 47  3
-```
-
-Looks like all the variables were significant with p < 0.05, but the model has poor predictive power. We correctly classified 92 species with only 3 true positives. That’s pretty bad. We could refine our model, but instead, let’s attempt logistical regression.
-
-```bash
-fit.logit <- glm(Is.Versicolor ~ Petal.Length + Sepal.Length, data = iris,
-                 family = binomial(link = 'logit'))
-summary(fit.logit)
-#> 
-#> Call:
-#> glm(formula = Is.Versicolor ~ Petal.Length + Sepal.Length, family = binomial(link = "logit"), 
-#>     data = iris)
-#> 
-#> Deviance Residuals: 
-#>     Min       1Q   Median       3Q      Max  
-#> -1.5493  -0.9437  -0.6451   1.2645   1.7894  
-#> 
-#> Coefficients:
-#>              Estimate Std. Error z value Pr(>|z|)   
-#> (Intercept)    3.0440     1.9752   1.541  0.12328   
-#> Petal.Length   0.7369     0.2282   3.229  0.00124 **
-#> Sepal.Length  -1.1262     0.4611  -2.443  0.01459 * 
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> (Dispersion parameter for binomial family taken to be 1)
-#> 
-#>     Null deviance: 190.95  on 149  degrees of freedom
-#> Residual deviance: 178.32  on 147  degrees of freedom
-#> AIC: 184.32
-#> 
-#> Number of Fisher Scoring iterations: 4
-iris[['Predict.Versicolor.logit']] <- as.numeric(predict(fit.logit) > 0.5)
-table(iris[, c('Is.Versicolor', 'Predict.Versicolor.logit')])
-#>              Predict.Versicolor.logit
-#> Is.Versicolor  0  1
-#>             0 99  1
-#>             1 50  0
-```
-
-Our model is far too conservative. It only predicted one versicolor! Both explanatory variables are significant with p < 0.05, however the intercept is not.
 
 ***One-way ANOVA***
 Next, let's perform our ANOVA test. We'll use the aov() function and pass in our variables in the correct order. We'll save our results to an object we name ANOVA.
